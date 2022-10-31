@@ -25,7 +25,6 @@ angle =radians(0)
 
 while True:
     rate(80)
-    # print(marble.pos)
     angle = angle + delta_angle
     if angle > radians(15) or angle < radians(-15):
         delta_angle = delta_angle * (-1)
