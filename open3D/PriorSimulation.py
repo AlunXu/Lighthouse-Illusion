@@ -2,6 +2,8 @@ import open3d as o3d
 from matplotlib import pyplot as plt
 import random
 import numpy as np
+import sys
+from os import path
 
 # because headless rendering not supported
 mesh = o3d.geometry.TriangleMesh.create_sphere()
@@ -30,6 +32,16 @@ render = o3d.visualization.rendering.OffscreenRenderer(512, 512)
 mat = o3d.visualization.rendering.MaterialRecord()
 mat.shader = 'defaultLit'
 
+
+# simulate the ground
+ground = o3d.geometry.TriangleMesh.create_box(
+    width=600., height=.1, depth=1000)
+
+ground.compute_vertex_normals()
+ground.translate([-150, -human_height, 0])
+render.scene.add_geometry("ground", ground, mat)
+surfaces.append(ground)
+
 for i in range(num_surfaces):
     surface_size = random.uniform(smallest_surface, largest_surface)
 
@@ -45,7 +57,6 @@ for i in range(num_surfaces):
     #coord_x = 0
     #coord_y = -human_height
     #distance = 2.5
-
     surface = o3d.geometry.TriangleMesh.create_box(
         width=surface_size, height=surface_size, depth=surface_thickness)
     surface.compute_vertex_normals()
@@ -85,13 +96,25 @@ cam.extrinsic = np.array([[1., 0., 0., 0.],
 render.setup_camera(cam.intrinsic, cam.extrinsic)
 
 cimg = render.render_to_image()
-dimg = render.render_to_depth_image()
+dimg = render.render_to_depth_image(z_in_view_space=True)
 
-plt.subplot(1, 2, 1)
-plt.imshow(cimg, origin = "lower")
-plt.subplot(1, 2, 2)
-plt.imshow(dimg, origin = "lower")
-plt.show()
+
+file_index = random.randint(1, 1000000)
+while path.exists('Snapshots/depth_'+str(file_index)):
+    file_index = random.randint(1, 1000000)
+
+np.save('Snapshots/depth_'+str(file_index), dimg)
+
+
+# plt.subplot(1, 2, 1)
+# # plt.imshow(cimg)
+# plt.imshow(cimg, origin="lower")
+# plt.subplot(1, 2, 2)
+# # plt.imshow(dimg)
+# plt.imshow(dimg, origin="lower")
+# plt.show()
 
 # simulation in 3D - it will take some time, uncomment it to see 3D simulation
 # u = o3d.visualization.draw_geometries(surfaces)
+
+sys.exit()  # only for 1000 iterations of simulation
