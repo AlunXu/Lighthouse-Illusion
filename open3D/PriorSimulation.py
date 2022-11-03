@@ -34,13 +34,13 @@ mat.shader = 'defaultLit'
 
 
 # simulate the ground
-ground = o3d.geometry.TriangleMesh.create_box(
-    width=600., height=.1, depth=1000)
+# ground = o3d.geometry.TriangleMesh.create_box(
+#     width=600., height=.1, depth=1000)
 
-ground.compute_vertex_normals()
-ground.translate([-150, -human_height, 0])
-render.scene.add_geometry("ground", ground, mat)
-surfaces.append(ground)
+# ground.compute_vertex_normals()
+# ground.translate([-150, -human_height, 0])
+# render.scene.add_geometry("ground", ground, mat)
+# surfaces.append(ground)
 
 for i in range(num_surfaces):
     surface_size = random.uniform(smallest_surface, largest_surface)
@@ -103,7 +103,7 @@ file_index = random.randint(1, 1000000)
 while path.exists('Snapshots/depth_'+str(file_index)):
     file_index = random.randint(1, 1000000)
 
-np.save('Snapshots/depth_'+str(file_index), dimg)
+np.save('Snapshots-NoGround/depth_'+str(file_index), dimg)
 
 
 # plt.subplot(1, 2, 1)
