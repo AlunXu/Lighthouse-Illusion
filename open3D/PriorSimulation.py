@@ -9,7 +9,7 @@ from os import path
 mesh = o3d.geometry.TriangleMesh.create_sphere()
 mesh.compute_vertex_normals()
 u = o3d.visualization.draw(
-    mesh, raw_mode=False, non_blocking_and_return_uid=True)
+    mesh, non_blocking_and_return_uid=True)
 # ---------------------------------------
 # surface: simulated rectangle
 surface_thickness = .1
@@ -22,6 +22,7 @@ largest_surface = 18
 view_width = 300
 view_height = 25
 human_height = 1.65
+lighthouse_height = 30
 
 shortest_distance = 2.5
 furtherest_distance = 300
@@ -43,7 +44,8 @@ mat.shader = 'defaultLit'
 # surfaces.append(ground)
 
 for i in range(num_surfaces):
-    surface_size = random.uniform(smallest_surface, largest_surface)
+    surface_width = random.uniform(smallest_surface, largest_surface)
+    surface_height = random.uniform(smallest_surface, largest_surface)
 
     coord_x = random.uniform(-view_width/2, view_width/2)
     # sample the mid-bottom point of the rectangle
@@ -58,19 +60,24 @@ for i in range(num_surfaces):
     #coord_y = -human_height
     #distance = 2.5
     surface = o3d.geometry.TriangleMesh.create_box(
-        width=surface_size, height=surface_size, depth=surface_thickness)
+        width=surface_width, height=surface_height, depth=surface_thickness)
     surface.compute_vertex_normals()
-    surface.translate([coord_x - surface_size/2, coord_y, distance])
+    surface.translate([coord_x - surface_width/2, coord_y, distance])
     render.scene.add_geometry("surface"+str(i), surface, mat)
     surfaces.append(surface)
+
+# lightbeam = o3d.geometry.TriangleMesh.create_cylinder(
+#     radius=0.1, height=100000)
+# lightbeam.translate([0, lighthouse_height-human_height, 0])
+# lightbeam.compute_vertex_normals()
+# render.scene.add_geometry("lightbeam", lightbeam, mat)
 
 # projected simulation in 2D
 width = 512
 height = 512
 
 # Camera Settings - CHANGE HERE
-f = 256
-f = 128
+f = 16
 px = 256
 py = 256
 
@@ -99,22 +106,23 @@ cimg = render.render_to_image()
 dimg = render.render_to_depth_image(z_in_view_space=True)
 
 
+filename = 'Snapshots/Snapshots-' + str(f)
 file_index = random.randint(1, 1000000)
-while path.exists('Snapshots/depth_'+str(file_index)):
+while path.exists(filename + '/depth_'+str(file_index)):
     file_index = random.randint(1, 1000000)
 
-np.save('Snapshots-NoGround/depth_'+str(file_index), dimg)
+np.save(filename + '/depth_'+str(file_index), dimg)
 
 
-# plt.subplot(1, 2, 1)
-# # plt.imshow(cimg)
-# plt.imshow(cimg, origin="lower")
-# plt.subplot(1, 2, 2)
-# # plt.imshow(dimg)
-# plt.imshow(dimg, origin="lower")
-# plt.show()
+plt.subplot(1, 2, 1)
+# plt.imshow(cimg)
+plt.imshow(cimg, origin="lower")
+plt.subplot(1, 2, 2)
+# plt.imshow(dimg)
+plt.imshow(dimg, origin="lower")
+plt.show()
 
 # simulation in 3D - it will take some time, uncomment it to see 3D simulation
 # u = o3d.visualization.draw_geometries(surfaces)
 
-sys.exit()  # only for 1000 iterations of simulation
+# sys.exit()  # only for 1000 iterations of simulation
