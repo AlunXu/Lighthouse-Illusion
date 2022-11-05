@@ -77,7 +77,7 @@ width = 512
 height = 512
 
 # Camera Settings - CHANGE HERE
-f = 16
+f = 256
 px = 256
 py = 256
 
@@ -114,15 +114,15 @@ while path.exists(filename + '/depth_'+str(file_index)):
 np.save(filename + '/depth_'+str(file_index), dimg)
 
 
-plt.subplot(1, 2, 1)
-# plt.imshow(cimg)
-plt.imshow(cimg, origin="lower")
-plt.subplot(1, 2, 2)
-# plt.imshow(dimg)
-plt.imshow(dimg, origin="lower")
-plt.show()
+# plt.subplot(1, 2, 1)
+# # plt.imshow(cimg)
+# plt.imshow(cimg, origin="lower")
+# plt.subplot(1, 2, 2)
+# # plt.imshow(dimg)
+# plt.imshow(dimg, origin="lower")
+# plt.show()
 
 # simulation in 3D - it will take some time, uncomment it to see 3D simulation
 # u = o3d.visualization.draw_geometries(surfaces)
 
-# sys.exit()  # only for 1000 iterations of simulation
+sys.exit()  # only for 1000 iterations of simulation
