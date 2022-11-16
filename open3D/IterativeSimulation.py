@@ -3,7 +3,7 @@ import sys
 
 
 # As headless rendering is not supported and the visualisation window be iteratively opened
-iteration = 1000
+iteration = 800
 for i in range(iteration):
     print(i)
     call(["python", "open3D/PriorSimulation.py"])

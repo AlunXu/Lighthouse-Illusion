@@ -14,7 +14,7 @@ u = o3d.visualization.draw(
 # surface: simulated rectangle
 surface_thickness = .1
 
-num_surfaces = 500
+num_surfaces = 200
 
 smallest_surface = 0.2
 largest_surface = 18
@@ -47,7 +47,9 @@ for i in range(num_surfaces):
     surface_width = random.uniform(smallest_surface, largest_surface)
     surface_height = random.uniform(smallest_surface, largest_surface)
 
-    coord_x = random.uniform(-view_width/2, view_width/2)
+    # coord_x = random.uniform(-view_width/2, view_width/2)
+    coord_x = 0
+
     # sample the mid-bottom point of the rectangle
     # CK: for Yang and Purves the camera is at a height of 1.65 m. I think we should put the camera at the origin (height 0) and adjust the simulation so that the "ground" is at -1.65 m
     coord_y = random.uniform(-human_height, view_height - human_height)
